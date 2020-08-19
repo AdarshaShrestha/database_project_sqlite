@@ -1,6 +1,8 @@
 import json
 import sqlite3
 import os
+from .database_connection import DatabaseConnection
+
 """
 Storing and retrieving books from a d json file
 
@@ -17,39 +19,43 @@ Storing and retrieving books from a d json file
 
 
 def create_book_table():
-    connection = sqlite3.connect('data.db')
-    cursor = connection.cursor()
+    with DatabaseConnection('data.db') as connection:
+        # connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-    cursor.execute('CREATE TABLE IF NOT EXISTS books(name text primary key, author text, read integer)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS books(name text primary key, author text, read integer)')
 
-    connection.commit()
-    connection.close()
+    #connection.commit()
+    #connection.close()
 
     """with open(books_file, 'w') as file:
         json.dump([], file)"""
 
 
 def add_book(name, author):
-    connection = sqlite3.connect('data.db')
-    cursor = connection.cursor()
-    
-    cursor.execute('INSERT INTO books VALUES(?, ?, 0)', (name, author))
 
-    connection.commit()
-    connection.close()
+    with DatabaseConnection('data.db') as connection:
+        #connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        cursor.execute('INSERT INTO books VALUES(?, ?, 0)', (name, author))
+
+        #connection.commit()
+        #connection.close()
     """books = get_all_books()
     books.append({'name': name, 'author': author, 'read': False})
     _save_all_books(books)"""
 
 
 def mark_book_as_read(name):
-    connection = sqlite3.connect('data.db')
-    cursor = connection.cursor()
+    with DatabaseConnection('data.db') as connection:
+        #connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-    cursor.execute('UPDATE books SET read=1 WHERE name=?', (name,))
+        cursor.execute('UPDATE books SET read=1 WHERE name=?', (name,))
 
-    connection.commit()
-    connection.close()
+    #connection.commit()
+    #connection.close()
     """books = get_all_books()
 
     for book in books:
@@ -59,13 +65,14 @@ def mark_book_as_read(name):
 
 
 def get_all_books():
-    connection = sqlite3.connect('data.db')
-    cursor = connection.cursor()
+    with DatabaseConnection('data.db') as connection:
+        #connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-    cursor.execute('SELECT * FROM books')
-    books = [{'name': row[0], 'author': row[1], 'read': row[2]} for row in cursor.fetchall()]       # [(name, author, read), (name, author, read).....]
+        cursor.execute('SELECT * FROM books')
+        books = [{'name': row[0], 'author': row[1], 'read': row[2]} for row in cursor.fetchall()]       # [(name, author, read), (name, author, read).....]
 
-    connection.close()
+    #connection.close()
 
     return books
 
@@ -79,13 +86,15 @@ def get_all_books():
 
 
 def delete_book(name):
-    connection = sqlite3.connect('data.db')
-    cursor = connection.cursor()
+    with DatabaseConnection('data.db') as connection:
 
-    cursor.execute('DELETE FROM books WHERE name=?', (name,))
+        #connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-    connection.commit()
-    connection.close()
+        cursor.execute('DELETE FROM books WHERE name=?', (name,))
+
+    #connection.commit()
+    #connection.close()
     """books = get_all_books()
     books = [book for book in books if book['name'] != name]
     _save_all_books(books)"""

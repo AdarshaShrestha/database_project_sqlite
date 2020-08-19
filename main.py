@@ -44,7 +44,7 @@ def list_books():
     books = database.get_all_books()
     print("Here are your books.")
     for book in books:
-        read = 'Yes' if book['read'] else 'No'
+        book['read'] = 'Yes' if book['read'] else 'No'
         print(f"{book['name']} by {book['author']}, read: {book['read']}")
 
 
