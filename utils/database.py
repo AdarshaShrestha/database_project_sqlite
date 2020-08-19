@@ -38,7 +38,7 @@ def add_book(name, author):
         #connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        cursor.execute('INSERT INTO books VALUES(?, ?, 0)', (name, author))
+        cursor.execute('INSERT OR IGNORE INTO books VALUES(?, ?, 0)', (name, author)) # to insert new books in the db or else ignore if the book is already in list
 
         #connection.commit()
         #connection.close()
